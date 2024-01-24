@@ -1,0 +1,5 @@
+responses:
+  hello: Hi there!
+  bye: Goodbye!
+  unknown: I don't know how to respond to that.
+
