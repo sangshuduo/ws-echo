@@ -6,6 +6,7 @@ import (
 	"log"
 	"net/http"
 	"sync"
+	"strings"
 
 	"github.com/gorilla/websocket"
 	"gopkg.in/yaml.v2"
@@ -52,7 +53,7 @@ func handleWebSocket(w http.ResponseWriter, r *http.Request, config *Config) {
 			return
 		}
 
-		clientMessage := string(p)
+		clientMessage := strings.TrimSuffix(string(p), "\n")
 		fmt.Printf("Received message: %s\n", clientMessage)
 
 		response, exists := config.Responses[clientMessage]
