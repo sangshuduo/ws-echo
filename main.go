@@ -2,11 +2,11 @@ package main
 
 import (
 	"fmt"
-	"io/ioutil"
 	"log"
 	"net/http"
-	"sync"
+	"os"
 	"strings"
+	"sync"
 
 	"github.com/gorilla/websocket"
 	"gopkg.in/yaml.v2"
@@ -22,7 +22,7 @@ type Config struct {
 }
 
 func readConfigFromFile(filePath string) (*Config, error) {
-	data, err := ioutil.ReadFile(filePath)
+	data, err := os.ReadFile(filePath)
 	if err != nil {
 		return nil, err
 	}
@@ -36,13 +36,19 @@ func readConfigFromFile(filePath string) (*Config, error) {
 	return &config, nil
 }
 
+func Check(f func() error) {
+	if err := f(); err != nil {
+		fmt.Println("Received error:", err)
+	}
+}
+
 func handleWebSocket(w http.ResponseWriter, r *http.Request, config *Config) {
 	conn, err := upgrader.Upgrade(w, r, nil)
 	if err != nil {
 		log.Println(err)
 		return
 	}
-	defer conn.Close()
+	defer Check(conn.Close)
 
 	fmt.Println("Client Connected")
 
@@ -98,4 +104,3 @@ func main() {
 	// Wait for the goroutine to finish (this will never happen unless there's an error)
 	wg.Wait()
 }
-
