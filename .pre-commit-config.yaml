@@ -42,6 +42,6 @@ repos:
         stages: [commit-msg]
         additional_dependencies: ['@commitlint/config-conventional']
   - repo: https://github.com/crate-ci/typos
-    rev: v1.23.6
+    rev: v1.24.6
     hooks:
       - id: typos
